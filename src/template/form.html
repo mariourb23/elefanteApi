@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Título de tu página</title>
+    <style>
+        body {
+            background-color: #f2f2f2; /* Gris claro */
+            color: #000; /* Negro */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #fbed04; /* Amarillo */
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px; /* Altura del header */
+        }
+
+        header img {
+            max-width: 80%; /* Ancho máximo de la imagen */
+            height: auto; /* Altura automática */
+            margin-right: 10px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            background-color: #000; /* Negro */
+            color: #fff; /* Blanco */
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff; /* Blanco */
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            padding: 20px;
+            text-align: center;
+            margin: 20px; /* Margen exterior del contenido principal */
+        }
+
+        footer {
+            background-color: #000; /* Negro */
+            color: #fff; /* Blanco */
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        form {
+            background-color: #fff; /* Blanco */
+            padding: 20px;
+            margin: 20px auto; /* Margen exterior */
+            max-width: 600px; /* Ancho máximo del formulario */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra */
+            margin-bottom: 30px; /* Espacio inferior */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc; /* Borde gris */
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #fbed04; /* Amarillo */
+            color: #000; /* Negro */
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #f9e305; /* Amarillo más claro al pasar el ratón */
+        }
+
+        button[type="button"] {
+            background-color: #fbed04; /* Amarillo */
+            color: #000; /* Negro */
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px; /* Margen a la izquierda */
+        }
+
+        button[type="button"]:hover {
+            background-color: #f9e305; /* Amarillo más claro al pasar el ratón */
+        }
+
+        /* Estilos para pantallas más pequeñas */
+        @media only screen and (max-width: 600px) {
+            header {
+                height: 80px; /* Reducir la altura del header */
+            }
+
+            header img {
+                max-width: 60%; /* Reducir el ancho máximo de la imagen */
+            }
+
+            section {
+                margin: 10px; /* Reducir el margen exterior del contenido principal */
+            }
+        }
+        /* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .verify-btn {
+    margin-left: 10px; /* Margen a la izquierda del botón */
+   }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logo.png" alt="Logo de tu empresa" width="12%" height="20%">
+    <h1>Comunidad Elefante</h1>
+</header>
+
+<nav>
+    <a href="#">Inicio</a>
+    <a href="#">Acerca de</a>
+    <a href="#">Contacto</a>
+</nav>
+
+<section>
+    <h2>Formulario para agregar Afiliado</h2>
+    <p>Agregar afiliados a la comunidad elefante</p>
+    <p>Al ingresar el dpi y este estar de manera correcta se llena automaticamente el nombre</p>
+    <form id="afiliado-form" action="http://127.0.0.1:5000/votantes" method="POST">
+        <label for="dpi">DPI:</label>
+        <input type="text" id="dpiInput" name="Dpi" pattern="\d{13}" maxlength="13" required>
+        <button type="button" class="verify-btn" onclick="verificarDPI()">Verificar</button> <!-- Botón para verificar DPI -->
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombreInput" name="Nombre" readonly>
+    
+
+        
+        <label for="departamento">Departamento:</label>
+        <select id="departamentoInput" name="Departamento" required>
+            <option value="" disabled selected>Selecciona un departamento</option>
+            <option value="Alta Verapaz">Alta Verapaz</option>
+            <option value="Baja Verapaz">Baja Verapaz</option>
+            <option value="Chimaltenango">Chimaltenango</option>
+            <option value="Chiquimula">Chiquimula</option>
+            <option value="El Progreso">El Progreso</option>
+            <option value="Escuintla">Escuintla</option>
+            <option value="Guatemala">Guatemala</option>
+            <option value="Huehuetenango">Huehuetenango</option>
+            <option value="Izabal">Izabal</option>
+            <option value="Jalapa">Jalapa</option>
+            <option value="Jutiapa">Jutiapa</option>
+            <option value="Petén">Petén</option>
+            <option value="Quetzaltenango">Quetzaltenango</option>
+            <option value="Quiché">Quiché</option>
+            <option value="Retalhuleu">Retalhuleu</option>
+            <option value="Sacatepéquez">Sacatepéquez</option>
+            <option value="San Marcos">San Marcos</option>
+            <option value="Santa Rosa">Santa Rosa</option>
+            <option value="Sololá">Sololá</option>
+            <option value="Suchitepéquez">Suchitepéquez</option>
+            <option value="Totonicapán">Totonicapán</option>
+            <option value="Zacapa">Zacapa</option>
+        </select>
+    
+        <label for="direccion">Dirección:</label>
+        <input type="text" id="direccionInput" name="Direccion" required>
+    
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefonoInput" name="Telefono" required>
+    
+        <label for="transporte">Transporte:</label>
+        <select id="transporteInput" name="Transporte" required>
+            <option value="" disabled selected>Selecciona una opcion</option>
+            <option value="Publico">Publico</option>
+            <option value="Propio">Propio</option>
+            <option value="Necesita Transporte">Necesita Transporte</option>
+        </select>
+    
+        <label for="empadronamiento">Empadronamiento:</label>
+        <select id="empadronamientoInput" name="Empadronamiento" required>
+            <option value="" disabled selected>Selecciona una opcion</option>
+            <option value="Si">Si</option>
+            <option value="No">No</option>
+        </select>
+    
+        <label for="centroDeVotacion">Centro de Votación:</label>
+        <input type="text" id="centroDeVotacionInput" name="CentroDeVotacion" required>
+        
+        <label for="rol">Rol:</label>
+        <select id="rolInput" name="Rol" required>
+            <option value="" disabled selected>Selecciona un rol</option>
+            <option value="Director Nacional">Director Nacional</option>
+            <option value="Director Regional">Director Regional</option>
+            <option value="Coordinador Departamental">Coordinador Departamental</option>
+            <option value="Coordinador Municipal">Coordinador Municipal </option>
+            <option value="Líder de comunidad ">Líder de comunidad </option>
+            <option value="Amigos del elefante">Amigos del elefante</option>
+        </select>
+
+        <input type="hidden" name="Foto" value="null">
+        <input type="hidden" name="Carnet" value="null">
+
+        <input type="submit" value="Enviar">
+    </form>
+
+    <div id="mensaje-exito" style="display: none; color: green;">
+        ¡Los datos se guardaron correctamente!
+    </div>
+    <div id="mensaje-error" style="display: none; color: red;">
+        ¡Hubo un error al guardar los datos. Inténtalo de nuevo más tarde!
+    </div>
+</section>
+
+<footer>
+    <p>Pie de página - Derechos de autor © 2024</p>
+</footer>
+
+<!-- The Modal -->
+<div id="error-modal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p id="error-text"></p>
+    </div>
+  </div>
+  
+<script>
+    function verificarDPI() {
+        var dpiInput = document.getElementById('dpiInput');
+        var dpiValue = dpiInput.value;
+
+        // Realizar solicitud HTTP al endpoint para verificar el DPI
+        fetch(`http://127.0.0.1:5000/verificar/${dpiValue}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al verificar DPI');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Llenar el input de nombre con el valor recibido
+            const nombreInput = document.getElementById('nombreInput');
+            nombreInput.value = data.NOMBRE;
+        })
+        .catch(error => {
+            // Mostrar el modal con el mensaje de error
+            const modal = document.getElementById('error-modal');
+            const errorText = document.getElementById('error-text');
+            errorText.textContent = error.message;
+            modal.style.display = 'block';
+    
+            // Agregar un evento para cerrar el modal al hacer clic en la X
+            const closeBtn = document.querySelector('.close');
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        });
+    
+    }
+</script>
+<script>
+    document.getElementById('afiliado-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Evitar el envío normal del formulario
+        var form = this;
+        var formData = new FormData(form);
+    
+        // Construir un objeto con los datos del formulario
+        var jsonData = {
+            Dpi: formData.get('Dpi'),
+            Nombre: formData.get('Nombre'),
+            Departamento: formData.get('Departamento'),
+            Direccion: formData.get('Direccion'),
+            Telefono: formData.get('Telefono'),
+            Transporte: formData.get('Transporte'),
+            Empadronamiento: formData.get('Empadronamiento'),
+            CentroDeVotacion: formData.get('CentroDeVotacion'),
+            Rol: formData.get('Rol'),
+            Foto: null, // Ajusta el valor de 'Foto' según lo necesites
+            Carnet: null // Ajusta el valor de 'Carnet' según lo necesites
+        };
+    
+        // Enviar los datos del formulario como JSON utilizando fetch
+        fetch(form.action, {
+            method: form.method,
+            headers: {
+                'Content-Type': 'application/json' // Especificar el tipo de contenido como JSON
+            },
+            body: JSON.stringify(jsonData) // Convertir el objeto JSON a cadena JSON
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Hubo un error al guardar los datos.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Mostrar mensaje de éxito y ocultar formulario
+            document.getElementById('mensaje-exito').style.display = 'block';
+            form.reset();
+        })
+        .catch(error => {
+            // Mostrar mensaje de error
+            document.getElementById('mensaje-error').style.display = 'block';
+        });
+    });
+    
+</script>
+
+</body>
+</html>

@@ -1,13 +1,101 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, url_for, session, redirect, Response
 from config import config
 from flask_mysqldb import MySQL
 import requests
+import MySQLdb.cursors
+import sys
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='template')
 
 conexion = MySQL(app)
 
+@app.route('/')
+def home():
+    return render_template('index.html')   
+
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')   
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+    if request.method == 'POST' and 'txtCorreo' in request.form and 'txtPassword' in request.form:
+       
+        _correo = request.form['txtCorreo']
+        _password = request.form['txtPassword']
+
+        cur = conexion.connection.cursor()
+        cur.execute('SELECT * FROM usuarios WHERE dpi = %s AND password = %s AND id_rol IS NOT NULL', (_correo, _password,))
+        account = cur.fetchone()
+        dic = (('id', account[0]), ('correo', account[1]), ('dpi', account[3]), ('id_rol', account[4]))
+        accountdic = dict((x, y) for x, y in dic)
+
+        print('START', file = sys.stderr)
+        print(accountdic, file = sys.stderr)
+
+      
+        if account:
+            session['logueado'] = True
+            session['id'] = accountdic['id']
+            session['id_rol'] = accountdic['id_rol']
+
+            if session['id_rol']==1:
+                return render_template("admin2.html")
+            elif session['id_rol']==2:
+                return render_template("admin.html")
+        else:
+            return render_template('index.html',mensaje="DPI ó Contraseña Incorrectas")
+
+# def login():
+#     message = ''
+#     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
+#         email = request.form['email']
+#         password = request.form['password']
+#         cursor = conexion.connection.cursor(MySQLdb.cursors.DictCursor)
+#         user = cursor.fecthone()
+#         if user:
+#             if user['role'] == 'admin':
+#                 session['loggedin'] = True
+#                 session['userid'] = user['userid']
+#                 session['name'] = user['name']
+#                 session['email'] = user['email']
+#                 message = 'Logged In successfully!'
+#                 return redirect(url_for('users'))
+#             else:
+#                 message = 'Only Admin can Login'
+#         else:
+#             message = 'Incorrect Password'
+#     return render_template('login.html', message = message)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('logueado', None)
+    session.pop('id', None)
+    session.pop('id_rol', None)
+    return redirect(url_for('home'))
+
+@app.route('/users', methods=['GET', 'POST'])
+def users():
+    if 'loggedin' in session:
+        cursor = conexion.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM user')
+        users = cursor.fetchall()
+        return render_template("users.html", users = users)
+    return redirect(url_for('login'))
+
+@app.route('/view', methods=['GET', 'POST'])
+def view():
+    if 'loggedin' in session:
+        viewUserId = request.args.get('userid')
+        cursor = conexion.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM user WHERE userid = % s', (viewUserId, ))
+        user = cursor.fetchone()
+        return render_template("view.html", user = user)
+    return redirect(url_for('login'))
+
+#    API   #
 @app.route('/votantes', methods=['GET'])
 def listar_votantes():
     try:
@@ -136,5 +224,6 @@ def procesar_nombre(nombre):
     return nuevo_nombre
 
 if __name__ == '__main__':
+    app.secret_key = "pinchellave"
     app.config.from_object(config['development'])
     app.run()

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Título de tu página</title>
+    <style>
+        body {
+            background-color: #f2f2f2; /* Gris claro */
+            color: #000; /* Negro */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #fbed04; /* Amarillo */
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px; /* Altura del header */
+        }
+
+        header img {
+            max-width: 80%; /* Ancho máximo de la imagen */
+            height: auto; /* Altura automática */
+            margin-right: 10px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            background-color: #000; /* Negro */
+            color: #fff; /* Blanco */
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff; /* Blanco */
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            padding: 20px;
+            text-align: center;
+            margin: 20px; /* Margen exterior del contenido principal */
+        }
+
+        footer {
+            background-color: #000; /* Negro */
+            color: #fff; /* Blanco */
+            text-align: center;
+            padding: 20px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Estilos para pantallas más pequeñas */
+        @media only screen and (max-width: 600px) {
+            header {
+                height: 80px; /* Reducir la altura del header */
+            }
+
+            header img {
+                max-width: 60%; /* Reducir el ancho máximo de la imagen */
+            }
+
+            section {
+                margin: 10px; /* Reducir el margen exterior del contenido principal */
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px; /* Margen superior de la tabla */
+        }
+
+        th, td {
+            border: 1px solid #ddd; /* Borde gris */
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #fbed04; /* Amarillo */
+        }
+
+        tr:hover {
+            background-color: #f2f2f2; /* Gris claro */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Gris más claro para filas pares */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logo.png" alt="Logo de tu empresa" width="12%" height="20%">
+    <h1>Comunidad Elefante</h1>
+</header>
+
+<nav>
+    <a href="#">Inicio</a>
+    <a href="#">Acerca de</a>
+    <a href="#">Contacto</a>
+</nav>
+
+<section>
+    <h2>Contenido principal</h2>
+    <p>Este es un ejemplo de un template HTML con colores amarillo, negro y gris.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>DPI</th>
+                <th>Nombre</th>
+                <th>Departamento</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Transporte</th>
+                <th>Empadronamiento</th>
+                <th>Centro de Votación</th>
+                <th>Foto</th>
+                <th>Carnet</th>
+                <th>Rol</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Aquí se agregarán las filas dinámicamente -->
+        </tbody>
+    </table>
+    
+    
+</section>
+
+<footer>
+    <p>Pie de página - Derechos de autor © 2024</p>
+</footer>
+
+<script>
+    fetch('http://127.0.0.1:5000/votantes')
+    .then(response => response.json())
+    .then(data => {
+        const votantes = data.votantes;
+        const tableBody = document.getElementById('table-body');
+
+        votantes.forEach(votante => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${votante.Dpi}</td>
+                <td>${votante.Nombre}</td>
+                <td>${votante.Departamento}</td>
+                <td>${votante.Direccion}</td>
+                <td>${votante.Telefono}</td>
+                <td>${votante.Transporte}</td>
+                <td>${votante.Empadronamiento}</td>
+                <td>${votante.CentroDeVotacion}</td>
+                <td>${votante.Foto}</td>
+                <td>${votante.Carnet}</td>
+                <td>${votante.Rol}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    })
+    .catch(error => console.error('Error al obtener los datos:', error));
+
+
+</script>
+
+</body>
+</html>
